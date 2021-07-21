@@ -11,13 +11,22 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch, cm
 from reportlab.lib.utils import ImageReader
 from io import BytesIO
-import panda as pd
+import pandas as pd
 
 global fname
 global csv
 
-def open_csv():
-
+def open_csv(root):
+    global csv
+    csv = filedialog.askopenfile(mode='r',title='Choose a file')
+    column_names = []
+    csv_string = "Available values: "
+    read_file = pd.read_csv(csv)
+    for col_name in read_file.columns:
+        column_names.append(col_name)
+        csv_string += col_name + " "
+    csv_text = Label(root,text=csv_string)
+    csv_text.grid(column = 2, row = 7)
 
 def save_as_pdf(message,x,y):
     img = Image.open(fname)
