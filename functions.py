@@ -11,33 +11,49 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch, cm
 from reportlab.lib.utils import ImageReader
 from io import BytesIO
+import panda as pd
 
 global fname
+global csv
 
-def image_to_byte_array(image:Image):
-  imgByteArr = BytesIO()
-  image.save(imgByteArr, format=image.format)
-  imgByteArr = imgByteArr.getvalue()
-  final = ImageReader(BytesIO(imgByteArr))
-  return final
+def open_csv():
 
-def save_as_pdf(message):
+
+def save_as_pdf(message,x,y):
     img = Image.open(fname)
     I1 = ImageDraw.Draw(img)
-    W = img.size[0]
-    H = img.size[1]
+    W = int(img.size[0])
+    H = int(img.size[1])
     ratio = H/W
+    nametag_height = 150
+    nametag_width = int(nametag_height/ratio)
     msg = message
-    myFont = ImageFont.truetype(r'C:\Users\System-Pc\Desktop\arial.ttf', 300)
-    w, h = myFont.getsize(msg)
-    I1.text(((W-w)/2,(H-h)/2.5), msg,font = myFont, fill="black")
+
+
+    myFont = ImageFont.truetype(r'C:\Users\System-Pc\Desktop\timesbd.ttf', 100)
+    w,h = myFont.getsize(msg)
+
+    I1.text(((W-w)/2,(H-h)/2-(185-y)*(150/185)), msg , font = myFont, fill="black")
     c = canvas.Canvas('ex1.pdf')
+    def image_to_byte_array(image:Image):
+      imgByteArr = BytesIO()
+      image.save(imgByteArr, format=image.format)
+      imgByteArr = imgByteArr.getvalue()
+      final = ImageReader(BytesIO(imgByteArr))
+      return final
     finalImage = image_to_byte_array(img)
-    c.drawImage(finalImage, 0, 0,  int(6/ratio)*cm, 6*cm) #w,h
-    c.drawImage(finalImage, 260, 0,  int(6/ratio)*cm, 6*cm)
+
+    c.drawImage(finalImage, 50, 30,  nametag_width, nametag_height) #x,y and w,h
+    c.drawImage(finalImage, 50+nametag_width+10, 30,  nametag_width, nametag_height)
+
+    c.drawImage(finalImage, 50, 30+nametag_height+10, nametag_width, nametag_height)
+    c.drawImage(finalImage, 50+nametag_width+10, 30+nametag_height+10,  nametag_width, nametag_height)
+
+    c.drawImage(finalImage, 50, 30+2*nametag_height+20,  nametag_width, nametag_height)
+    c.drawImage(finalImage, 50+nametag_width+10, 30+2*nametag_height+20,  nametag_width, nametag_height)
+
     c.showPage()
     c.save()
-
 
 def open_imagefile(root,message,x,y):
     global canvas_img
@@ -50,7 +66,7 @@ def open_imagefile(root,message,x,y):
     canvas = Canvas(root,width=300,height=185)
     canvas.grid(column = 2, row=1)
     canvas.create_image(0,0,image=canvas_img,anchor='nw')
-    canvas.create_text(x,y,fill="darkblue",font="Times 20 bold",
+    canvas.create_text(x,y,fill="black",font="Times 20 bold",
                         text=message)
 
 def resize_image(img):

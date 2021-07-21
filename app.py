@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image
 from PIL import ImageDraw
-from functions import save_as_pdf,open_imagefile
+from functions import save_as_pdf,open_imagefile,open_csv
 import os
 
 
@@ -23,6 +23,8 @@ y_position_label = Label(interactables, text="Y Position: ", font=("Raleway", 10
 name = tk.StringVar()
 nameEntered = ttk.Entry(interactables, width = 15, textvariable = name)
 
+csv_btn  = ttk.Button(interactables, width = 15, text = "Choose a file", command= lambda:open_csv())
+
 x_position = tk.StringVar(value = "150")
 x_position = ttk.Entry(interactables, width = 15, textvariable = x_position)
 x_position.insert(END, "150")
@@ -32,13 +34,14 @@ y_position = ttk.Entry(interactables, width = 15, textvariable = y_position)
 y_position.insert(END, "70")
 
 browse_btn = Button(interactables, text="Browse", command= lambda:open_imagefile(display,name.get(),x_position.get(),y_position.get()), font=("Raleway",12), bg="#20bebe", fg="white", height=1, width=15)
-save_pdf_btn = Button(interactables,text = "Save As PDF", command = lambda:save_as_pdf((name.get())),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
+save_pdf_btn = Button(interactables,text = "Save As PDF", command= lambda:save_as_pdf(name.get(),int(x_position.get()),int(y_position.get())),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
 
 nameEntered.grid(column = 2, row = 1)
 x_position.grid(column = 2, row = 2)
 y_position.grid(column = 2, row = 3)
 browse_btn.grid(column=2, row=4,pady=10)
 save_pdf_btn.grid(column = 2, row = 5, pady = 10)
+csv_btn.grid(column = 2, row = 6, pady = 10)
 
 name_label.grid(column = 1,row=1)
 x_position_label.grid(column = 1,row=2)
