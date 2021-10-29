@@ -10,6 +10,7 @@ import os
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch, cm
 from reportlab.lib.utils import ImageReader
+from reportlab.lib.pagesizes import A4
 from io import BytesIO
 import pandas as pd
 
@@ -58,7 +59,7 @@ def open_csv(root):
 #NAMETAG FUNCTIONS
 def nt_save_as_pdf(message,x,y):
     msg = message
-    c = canvas.Canvas('test.pdf')
+    c = canvas.Canvas('test.pdf',pagesize=A4)
 
     def image_to_byte_array(image:Image):
       imgByteArr = BytesIO()
@@ -78,11 +79,6 @@ def nt_save_as_pdf(message,x,y):
             global read_csv_file
             total_array.append(read_csv_file[user_input_values].values)
             print(total_array)
-    else:
-        total_array = []
-        total_array.append(message)
-
-        if "<" in msg:
             for values_index in range(len(total_array[0])):
                 current_text = ""
                 img = Image.open(fname)
@@ -99,39 +95,53 @@ def nt_save_as_pdf(message,x,y):
 
                 I1.text(((W-w)/2,(H-h)/2-(185-y)*(150/185)), current_text , font = myFont, fill="black")
                 finalImage = image_to_byte_array(img)
-                if (values_index %6 == 0):
+                if (values_index %10 == 0):
                     c.drawImage(finalImage, 50, 30,  nametag_width, nametag_height) #x,y and w,h
                     clear_canvas()
-                if (values_index %6 == 1):
-                    c.drawImage(finalImage, 50+nametag_width+10, 30,  nametag_width, nametag_height)
+                if (values_index %10 == 1):
+                    c.drawImage(finalImage, 50+nametag_width+1, 30,  nametag_width, nametag_height)
                     clear_canvas()
-                if (values_index %6 == 2):
-                    c.drawImage(finalImage, 50, 30+nametag_height+10, nametag_width, nametag_height)
+                if (values_index %10 == 2):
+                    c.drawImage(finalImage, 50, 30+nametag_height+2, nametag_width, nametag_height)
                     clear_canvas()
-                if (values_index %6 == 3):
-                    c.drawImage(finalImage, 50+nametag_width+10, 30+nametag_height+10,  nametag_width, nametag_height)
+                if (values_index %10 == 3):
+                    c.drawImage(finalImage, 50+nametag_width+1, 30+nametag_height+2,  nametag_width, nametag_height)
                     clear_canvas()
-                if (values_index %6 == 4):
-                    c.drawImage(finalImage, 50, 30+2*nametag_height+20,  nametag_width, nametag_height)
+                if (values_index %10 == 4):
+                    c.drawImage(finalImage, 50, 30+2*nametag_height+4,  nametag_width, nametag_height)
                     clear_canvas()
-                if (values_index %6 == 5):
-                    c.drawImage(finalImage, 50+nametag_width+10, 30+2*nametag_height+20,  nametag_width, nametag_height)
+                if (values_index %10 == 5):
+                    c.drawImage(finalImage, 50+nametag_width+1, 30+2*nametag_height+4,  nametag_width, nametag_height)
+                    clear_canvas()
+                if (values_index %10 == 6):
+                    c.drawImage(finalImage, 50, 30+3*nametag_height+6,  nametag_width, nametag_height)
+                    clear_canvas()
+                if (values_index %10 == 7):
+                    c.drawImage(finalImage, 50+nametag_width+1, 30+3*nametag_height+6,  nametag_width, nametag_height)
+                    clear_canvas()
+                if (values_index %10 == 8):
+                    c.drawImage(finalImage, 50, 30+4*nametag_height+8,  nametag_width, nametag_height)
+                    clear_canvas()
+                if (values_index %10 == 9):
+                    c.drawImage(finalImage, 50+nametag_width+1, 30+4*nametag_height+8,  nametag_width, nametag_height)
                     clear_canvas()
                     c.showPage()
-        else:
-            current_text = ""
-            img = Image.open(fname)
-            I1 = ImageDraw.Draw(img)
-            W = int(img.size[0])
-            H = int(img.size[1])
-            ratio = H/W
-            nametag_height = 150
-            nametag_width = int(nametag_height/ratio)
-            current_text = total_array[0]
-            w,h = myFont.getsize(current_text)
-            I1.text(((W-w)/2,(H-h)/2-(185-y)*(150/185)), current_text , font = myFont, fill="black")
-            finalImage = image_to_byte_array(img)
-            c.drawImage(finalImage, 50, 30,  nametag_width, nametag_height) #x,y and w,h
+    else:
+        total_array = []
+        total_array.append(message)
+        current_text = ""
+        img = Image.open(fname)
+        I1 = ImageDraw.Draw(img)
+        W = int(img.size[0])
+        H = int(img.size[1])
+        ratio = H/W
+        nametag_height = 150
+        nametag_width = int(nametag_height/ratio)
+        current_text = total_array[0]
+        w,h = myFont.getsize(current_text)
+        I1.text(((W-w)/2,(H-h)/2-(185-y)*(150/185)), current_text , font = myFont, fill="black")
+        finalImage = image_to_byte_array(img)
+        c.drawImage(finalImage, 50, 30,  nametag_width, nametag_height) #x,y and w,h
     c.save()
 def nt_open_imagefile(display,message,x,y):
     global canvas_img
@@ -151,7 +161,7 @@ def nt_open_imagefile(display,message,x,y):
 def lbl_save_as_pdf(message,school):
     msg = message
     sch = school
-    c = canvas.Canvas('test.pdf')
+    c = canvas.Canvas('test.pdf',pagesize=A4)
     def image_to_byte_array(image:Image):
       imgByteArr = BytesIO()
       image.save(imgByteArr, format=image.format)
@@ -249,3 +259,76 @@ def lbl_open_imagefile(display,message,school):
     text=school)
 
 #CERTIFICATE FUNCTIONS
+def ctf_save_as_pdf(message,x,y):
+    msg = message
+    c = canvas.Canvas('test.pdf', pagesize=A4)
+    def image_to_byte_array(image:Image):
+      imgByteArr = BytesIO()
+      image.save(imgByteArr, format=image.format)
+      imgByteArr = imgByteArr.getvalue()
+      final = ImageReader(BytesIO(imgByteArr))
+      return final
+
+    myFont = ImageFont.truetype(r'C:\Users\System-Pc\Desktop\timesbd.ttf', 100)
+
+    def clear_canvas():
+        I1.rectangle((300, 300, 300, 300))
+
+    if "<" in msg:
+            user_input_values = extract_input(message)
+            total_array = []
+            global read_csv_file
+            total_array.append(read_csv_file[user_input_values].values)
+            print(total_array)
+            for values_index in range(len(total_array[0])):
+                current_text = ""
+                img = Image.open(fname)
+                I1 = ImageDraw.Draw(img)
+                W = int(img.size[0])
+                H = int(img.size[1])
+                ratio = H/W
+                ctf_height = 600
+                ctf_width = int(ctf_height/ratio)
+                for i in range(len(total_array[0][values_index])):
+                    current_text += total_array[0][values_index][i] + " "
+                w,h = myFont.getsize(current_text)
+                I1.text(((W-w)/2,(H-h)/2-(185-y)*(150/185)), current_text , font = myFont, fill="black")
+                finalImage = image_to_byte_array(img)
+                c.translate(A4[0]/2, A4[1]/2)
+                c.rotate(90)
+                c.drawImage(finalImage, -425, -300,  ctf_width, ctf_height) #x,y and w,h
+                clear_canvas()
+                c.showPage()
+    else:
+        total_array = []
+        total_array.append(message)
+        current_text = ""
+        img = Image.open(fname)
+        I1 = ImageDraw.Draw(img)
+        W = int(img.size[0])
+        H = int(img.size[1])
+        ratio = H/W
+        ctf_height = 600
+        ctf_width = int(ctf_height/ratio)
+        current_text = total_array[0]
+        w,h = myFont.getsize(current_text)
+        I1.text(((W-w)/2,(H-h)/2-(185-y)*(150/185)), current_text , font = myFont, fill="black")
+        finalImage = image_to_byte_array(img)
+        c.translate(A4[0]/2, A4[1]/2)
+        c.rotate(90)
+        c.drawImage(finalImage, -425, -300,  ctf_width, ctf_height) #x,y and w,h
+        clear_canvas()
+    c.save()
+def ctf_open_imagefile(display,message,x,y):
+    global canvas_img
+    global fname
+    currdir = os.getcwd()
+    fname = filedialog.askopenfile(mode='rb',title='Choose a file')
+    img = Image.open(fname)
+    img = resize_image(img)
+    canvas_img = ImageTk.PhotoImage(img)
+    canvas = Canvas(display,width=300,height=185)
+    canvas.grid(column = 2, row=1)
+    canvas.create_image(0,0,image=canvas_img,anchor='nw')
+    canvas.create_text(x,y,fill="black",font="Times 20 bold",
+    text=message)

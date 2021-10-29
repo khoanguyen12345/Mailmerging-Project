@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from PIL import Image
 from PIL import ImageDraw
-from functions import nt_save_as_pdf,nt_open_imagefile,lbl_save_as_pdf,lbl_open_imagefile,open_csv
+from functions import nt_save_as_pdf,nt_open_imagefile,lbl_save_as_pdf,lbl_open_imagefile,ctf_save_as_pdf,ctf_open_imagefile,open_csv
 import os
 
 
@@ -86,8 +86,8 @@ ctf_y_position = tk.StringVar(value = "70")
 ctf_y_position = ttk.Entry(interactables, width = 15, textvariable = ctf_y_position)
 ctf_y_position.insert(END, "70")
 #buttons
-ctf_browse_btn = Button(interactables, text="Browse", command= lambda:open_imagefile(display,ctf_name.get(),ctf_x_position.get(),ctf_y_position.get(),format_option.get()), font=("Raleway",12), bg="#20bebe", fg="white", height=1, width=15)
-ctf_save_pdf_btn = Button(interactables,text = "Save As PDF", command= lambda:save_as_pdf(ctf_name.get(),int(ctf_x_position.get()),int(ctf_y_position.get()),format_option.get()),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
+ctf_browse_btn = Button(interactables, text="Browse", command= lambda:ctf_open_imagefile(display,ctf_name.get(),ctf_x_position.get(),ctf_y_position.get()), font=("Raleway",12), bg="#20bebe", fg="white", height=1, width=15)
+ctf_save_pdf_btn = Button(interactables,text = "Save As PDF", command= lambda:ctf_save_as_pdf(ctf_name.get(),int(ctf_x_position.get()),int(ctf_y_position.get())),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
 
 def clear_grid():
     for widget in interactables.grid_slaves():
