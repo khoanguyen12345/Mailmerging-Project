@@ -38,7 +38,7 @@ def resize_image(img):
     width = int(img.size[0])
     height = int(img.size[1])
     ratio = height/width
-    height = 185
+    height = 150
     width = int(height/ratio)
     img = img.resize((width,height))
     return img
@@ -53,22 +53,23 @@ def open_csv(root):
         column_names.append(col_name)
         csv_string += col_name + " "
     csv_text = Label(root,text=csv_string)
-    csv_text.grid(column = 2, row = 8)
+    csv_text.grid(column = 2, row = 19)
 
 
 #NAMETAG FUNCTIONS
-def nt_save_as_pdf(message,x,y):
+def nt_save_as_pdf(message,y,font,font_size,font_color):
     msg = message
     c = canvas.Canvas('test.pdf',pagesize=A4)
 
     def image_to_byte_array(image:Image):
       imgByteArr = BytesIO()
-      image.save(imgByteArr, format=image.format)
+      image.save(imgByteArr, format='JPEG')
       imgByteArr = imgByteArr.getvalue()
       final = ImageReader(BytesIO(imgByteArr))
       return final
 
-    myFont = ImageFont.truetype(r'C:\Users\System-Pc\Desktop\timesbd.ttf', 100)
+    temp_font_string = font+"bd.ttf"
+    myFont = ImageFont.truetype(temp_font_string, int(font_size))
 
     def clear_canvas():
         I1.rectangle((100, 100, 300, 150))
@@ -82,19 +83,15 @@ def nt_save_as_pdf(message,x,y):
             for values_index in range(len(total_array[0])):
                 current_text = ""
                 img = Image.open(fname)
+                img = img.resize((248,150))
                 I1 = ImageDraw.Draw(img)
-                W = int(img.size[0])
-                H = int(img.size[1])
-                ratio = H/W
-                nametag_height = 150
-                nametag_width = int(nametag_height/ratio)
                 for i in range(len(total_array[0][values_index])):
                     current_text += total_array[0][values_index][i] + " "
-
                 w,h = myFont.getsize(current_text)
-
-                I1.text(((W-w)/2,(H-h)/2-(185-y)*(150/185)), current_text , font = myFont, fill="black")
+                I1.text(((248-w)/2,y-10), current_text , font = myFont, fill=font_color)
                 finalImage = image_to_byte_array(img)
+                nametag_width = 248
+                nametag_height = 150
                 if (values_index %10 == 0):
                     c.drawImage(finalImage, 50, 30,  nametag_width, nametag_height) #x,y and w,h
                     clear_canvas()
@@ -131,31 +128,38 @@ def nt_save_as_pdf(message,x,y):
         total_array.append(message)
         current_text = ""
         img = Image.open(fname)
+        img = img.resize((248,150))
         I1 = ImageDraw.Draw(img)
-        W = int(img.size[0])
-        H = int(img.size[1])
-        ratio = H/W
-        nametag_height = 150
-        nametag_width = int(nametag_height/ratio)
         current_text = total_array[0]
         w,h = myFont.getsize(current_text)
-        I1.text(((W-w)/2,(H-h)/2-(185-y)*(150/185)), current_text , font = myFont, fill="black")
+        I1.text(((248-w)/2,y-10), current_text , font = myFont, fill=font_color)
         finalImage = image_to_byte_array(img)
-        c.drawImage(finalImage, 50, 30,  nametag_width, nametag_height) #x,y and w,h
+        c.drawImage(finalImage, 50, 30,  248, 150) #x,y and w,h
     c.save()
-def nt_open_imagefile(display,message,x,y):
+def nt_open_imagefile(display,message,y,font,font_size,font_color):
     global canvas_img
     global fname
+    global canvas_img_postscript
     currdir = os.getcwd()
     fname = filedialog.askopenfile(mode='rb',title='Choose a file')
+    print(fname)
     img = Image.open(fname)
     img = resize_image(img)
     canvas_img = ImageTk.PhotoImage(img)
     canvas = Canvas(display,width=300,height=185)
     canvas.grid(column = 2, row=1)
     canvas.create_image(0,0,image=canvas_img,anchor='nw')
-    canvas.create_text(x,y,fill="black",font="Times 20 bold",
+    temp_font_string = font+ " "+font_size+" bold"
+    canvas.create_text(130,y,fill=font_color,font=temp_font_string,
     text=message)
+def nt_update_preview(display,message,y,font,font_size,font_color):
+    canvas = Canvas(display,width=300,height=185)
+    canvas.grid(column = 2, row=1)
+    canvas.create_image(0,0,image=canvas_img,anchor='nw')
+    temp_font_string = font+ " "+font_size+" bold"
+    canvas.create_text(130,y,fill=font_color,font=temp_font_string,
+    text=message)
+
 
 #LABEL FUNCTIONS
 def lbl_save_as_pdf(message,school):
@@ -246,7 +250,7 @@ def lbl_open_imagefile(display,message,school):
     global canvas_img
     global fname
     currdir = os.getcwd()
-    fname = "localresources/label.jpg"
+    fname = filedialog.askopenfile(mode='rb',title='Choose a file')
     img = Image.open(fname)
     img = img.resize((202,100))
     canvas_img = ImageTk.PhotoImage(img)
@@ -259,17 +263,19 @@ def lbl_open_imagefile(display,message,school):
     text=school)
 
 #CERTIFICATE FUNCTIONS
-def ctf_save_as_pdf(message,x,y):
+def ctf_save_as_pdf(message,x,y,font,font_size,font_color):
     msg = message
     c = canvas.Canvas('test.pdf', pagesize=A4)
     def image_to_byte_array(image:Image):
       imgByteArr = BytesIO()
-      image.save(imgByteArr, format=image.format)
+      image.save(imgByteArr, format='JPEG')
       imgByteArr = imgByteArr.getvalue()
       final = ImageReader(BytesIO(imgByteArr))
       return final
 
-    myFont = ImageFont.truetype(r'C:\Users\System-Pc\Desktop\timesbd.ttf', 100)
+    temp_font_string = font+"bd.ttf"
+    temp_font_size = int(font_size)*4
+    myFont = ImageFont.truetype(temp_font_string, temp_font_size)
 
     def clear_canvas():
         I1.rectangle((300, 300, 300, 300))
@@ -280,23 +286,21 @@ def ctf_save_as_pdf(message,x,y):
             global read_csv_file
             total_array.append(read_csv_file[user_input_values].values)
             print(total_array)
+            x = x*4
+            y = y*4
             for values_index in range(len(total_array[0])):
                 current_text = ""
                 img = Image.open(fname)
+                img = img.resize((848,600))
                 I1 = ImageDraw.Draw(img)
-                W = int(img.size[0])
-                H = int(img.size[1])
-                ratio = H/W
-                ctf_height = 600
-                ctf_width = int(ctf_height/ratio)
                 for i in range(len(total_array[0][values_index])):
                     current_text += total_array[0][values_index][i] + " "
                 w,h = myFont.getsize(current_text)
-                I1.text(((W-w)/2,(H-h)/2-(185-y)*(150/185)), current_text , font = myFont, fill="black")
+                I1.text((x-w/2,y-20), current_text , font = myFont, fill=font_color)
                 finalImage = image_to_byte_array(img)
                 c.translate(A4[0]/2, A4[1]/2)
                 c.rotate(90)
-                c.drawImage(finalImage, -425, -300,  ctf_width, ctf_height) #x,y and w,h
+                c.drawImage(finalImage, -425, -300,  848, 600) #x,y and w,h
                 clear_canvas()
                 c.showPage()
     else:
@@ -304,22 +308,20 @@ def ctf_save_as_pdf(message,x,y):
         total_array.append(message)
         current_text = ""
         img = Image.open(fname)
+        img = img.resize((848,600))
         I1 = ImageDraw.Draw(img)
-        W = int(img.size[0])
-        H = int(img.size[1])
-        ratio = H/W
-        ctf_height = 600
-        ctf_width = int(ctf_height/ratio)
         current_text = total_array[0]
         w,h = myFont.getsize(current_text)
-        I1.text(((W-w)/2,(H-h)/2-(185-y)*(150/185)), current_text , font = myFont, fill="black")
+        x = x*4
+        y = y*4
+        I1.text((x-w/3,y-20), current_text , font = myFont, fill=font_color)
         finalImage = image_to_byte_array(img)
         c.translate(A4[0]/2, A4[1]/2)
         c.rotate(90)
-        c.drawImage(finalImage, -425, -300,  ctf_width, ctf_height) #x,y and w,h
+        c.drawImage(finalImage, -425, -300,  848, 600) #x,y and w,h
         clear_canvas()
     c.save()
-def ctf_open_imagefile(display,message,x,y):
+def ctf_open_imagefile(display,message,x,y,font,font_size,font_color):
     global canvas_img
     global fname
     currdir = os.getcwd()
@@ -327,8 +329,16 @@ def ctf_open_imagefile(display,message,x,y):
     img = Image.open(fname)
     img = resize_image(img)
     canvas_img = ImageTk.PhotoImage(img)
-    canvas = Canvas(display,width=300,height=185)
+    canvas = Canvas(display,width=250,height=185)
     canvas.grid(column = 2, row=1)
     canvas.create_image(0,0,image=canvas_img,anchor='nw')
-    canvas.create_text(x,y,fill="black",font="Times 20 bold",
+    temp_font_string = font+" "+font_size+" bold"
+    canvas.create_text(x,y,fill=font_color,font=temp_font_string,
+    text=message)
+def ctf_update_preview(display,message,x,y,font,font_size,font_color):
+    canvas = Canvas(display,width=250,height=185)
+    canvas.grid(column = 2, row=1)
+    canvas.create_image(0,0,image=canvas_img,anchor='nw')
+    temp_font_string = font+" "+font_size+" bold"
+    canvas.create_text(x,y,fill=font_color,font=temp_font_string,
     text=message)
