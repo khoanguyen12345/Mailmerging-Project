@@ -45,15 +45,16 @@ def resize_image(img):
 #function for openning csv
 def open_csv(root):
     global read_csv_file
-    csv = filedialog.askopenfile(mode='r',title='Choose a file')
-    column_names = []
-    csv_string = "Available values: "
-    read_csv_file = pd.read_csv(csv)
-    for col_name in read_csv_file.columns:
-        column_names.append(col_name)
-        csv_string += col_name + " "
-    csv_text = Label(root,text=csv_string)
-    csv_text.grid(column = 2, row = 19)
+    csv_file_open = filedialog.askopenfile(mode='r',title='Choose a file')
+    columns = []
+    csv_string = "Values: "
+    read_csv_file = pd.read_csv(csv_file_open)
+
+    for col in read_csv_file.columns:
+        columns.append(col)
+        csv_string += col + " "
+    csv_text_available_values = Label(root,text=csv_string)
+    csv_text_available_values.grid(column = 2, row = 19)
 
 
 #NAMETAG FUNCTIONS
@@ -62,11 +63,11 @@ def nt_save_as_pdf(message,y,font,font_size,font_color):
     c = canvas.Canvas('test.pdf',pagesize=A4)
 
     def image_to_byte_array(image:Image):
-      imgByteArr = BytesIO()
-      image.save(imgByteArr, format='JPEG')
-      imgByteArr = imgByteArr.getvalue()
-      final = ImageReader(BytesIO(imgByteArr))
-      return final
+      image_byte_array = BytesIO()
+      image.save(image_byte_array, format='PNG')
+      image_byte_array = image_byte_array.getvalue()
+      result_image = ImageReader(BytesIO(image_byte_array))
+      return result_image
 
     temp_font_string = font+"bd.ttf"
     myFont = ImageFont.truetype(temp_font_string, int(font_size))
@@ -167,11 +168,11 @@ def lbl_save_as_pdf(message,school):
     sch = school
     c = canvas.Canvas('test.pdf',pagesize=A4)
     def image_to_byte_array(image:Image):
-      imgByteArr = BytesIO()
-      image.save(imgByteArr, format=image.format)
-      imgByteArr = imgByteArr.getvalue()
-      final = ImageReader(BytesIO(imgByteArr))
-      return final
+      image_byte_array = BytesIO()
+      image.save(image_byte_array, format='PNG')
+      image_byte_array = image_byte_array.getvalue()
+      result_image = ImageReader(BytesIO(image_byte_array))
+      return result_image
 
     myFont = ImageFont.truetype(r'C:\Users\System-Pc\Desktop\timesbd.ttf', 30)
 
@@ -267,11 +268,11 @@ def ctf_save_as_pdf(message,x,y,font,font_size,font_color):
     msg = message
     c = canvas.Canvas('test.pdf', pagesize=A4)
     def image_to_byte_array(image:Image):
-      imgByteArr = BytesIO()
-      image.save(imgByteArr, format='JPEG')
-      imgByteArr = imgByteArr.getvalue()
-      final = ImageReader(BytesIO(imgByteArr))
-      return final
+      image_byte_array = BytesIO()
+      image.save(image_byte_array, format='PNG')
+      image_byte_array = image_byte_array.getvalue()
+      result_image = ImageReader(BytesIO(image_byte_array))
+      return result_image
 
     temp_font_string = font+"bd.ttf"
     temp_font_size = int(font_size)*4
