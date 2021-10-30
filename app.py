@@ -145,7 +145,6 @@ def update(*args):
         nt_csv_btn.grid(column = 2, row = 9, pady = 10)
         nt_save_pdf_btn.grid(column = 2, row = 10, pady = 10)
         nt_update_preview_btn.grid(column = 2, row = 11, pady = 10)
-
         #gridding for labels
         nt_name_label.grid(column = 1,row=2)
         nt_y_position_label.grid(column = 1,row=4)
