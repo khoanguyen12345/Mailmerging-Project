@@ -10,5 +10,5 @@ How to use:
 6. Look inside the folder containing app.py. The pdf should be there.
 
 Notes:
-- Still incomplete. Functions are all done but error-catching and bug-fixing will be implemented by the MUN conference (by January 2022)
+- Still incomplete. Functions are all done but error-catching and bug-fixing will be implemented by the time the MUN conference comes around (by January 2022)
 - Many thanks to official tkinter documentation, PIL documentation and StackOverflow for pointing me in the right direction!
