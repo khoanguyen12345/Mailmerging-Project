@@ -44,15 +44,15 @@ nt_font_color_label = Label(interactables, text="Text Color: ", font=("Raleway",
 nt_name = tk.StringVar()
 nt_nameEntered = ttk.Entry(interactables, width = 15, textvariable = nt_name)
 #open csv button
-nt_csv_btn = Button(interactables,text = "Open CSV", command= lambda:open_csv(interactables),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
+nt_csv_btn = Button(interactables,text = "Open CSV", command= lambda:open_csv(interactables),font = "Arial", bg = "#20bebe",fg = "black",height = 1,width=15)
 #y potition text input
 nt_y_position = tk.StringVar(value = "60")
 nt_y_position = ttk.Entry(interactables, width = 15, textvariable = nt_y_position)
 nt_y_position.insert(END, "60")
 #font text input
-nt_font = tk.StringVar(value = "times")
+nt_font = tk.StringVar(value = "Times New Roman Bold")
 nt_font = ttk.Entry(interactables, width = 15, textvariable = nt_font)
-nt_font.insert(END, "times")
+nt_font.insert(END, "Times New Roman Bold")
 #font size text input
 nt_font_size = tk.StringVar(value = "15")
 nt_font_size = ttk.Entry(interactables, width = 15, textvariable = nt_font_size)
@@ -62,9 +62,9 @@ nt_font_color = tk.StringVar(value = "#000000")
 nt_font_color = ttk.Entry(interactables, width = 15, textvariable = nt_font_color)
 nt_font_color.insert(END, "#000000")
 #buttons
-nt_browse_btn = Button(interactables, text="Browse", command= lambda:nt_open_imagefile(display,nt_name.get(),nt_y_position.get(),nt_font.get(),nt_font_size.get(),nt_font_color.get()), font=("Raleway",12), bg="#20bebe", fg="white", height=1, width=15)
-nt_save_pdf_btn = Button(interactables,text = "Save As PDF", command= lambda:nt_save_as_pdf(nt_name.get(),int(nt_y_position.get()),nt_font.get(),nt_font_size.get(),nt_font_color.get()),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
-nt_update_preview_btn = Button(interactables,text = "Update Preview", command= lambda:nt_update_preview(display,nt_name.get(),int(nt_y_position.get()),nt_font.get(),nt_font_size.get(),nt_font_color.get()),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
+nt_browse_btn = Button(interactables, text="Browse", command= lambda:nt_open_imagefile(display,nt_name.get(),nt_y_position.get(),nt_font.get(),nt_font_size.get(),nt_font_color.get()), font=("Raleway",12), bg="#20bebe", fg = "black", height=1, width=15)
+nt_save_pdf_btn = Button(interactables,text = "Save As PDF", command= lambda:nt_save_as_pdf(nt_name.get(),int(nt_y_position.get()),nt_font.get(),nt_font_size.get(),nt_font_color.get()),font = "Arial", bg = "#20bebe",fg = "black",height = 1,width=15)
+nt_update_preview_btn = Button(interactables,text = "Update Preview", command= lambda:nt_update_preview(display,nt_name.get(),int(nt_y_position.get()),nt_font.get(),nt_font_size.get(),nt_font_color.get()),font = "Arial", bg = "#20bebe",fg = "black",height = 1,width=15)
 
 #ELEMENTS FOR LABELS
 #labels
@@ -76,10 +76,10 @@ lbl_nameEntered = ttk.Entry(interactables, width = 15, textvariable = lbl_nameEn
 lbl_schoolEntered = tk.StringVar()
 lbl_schoolEntered = ttk.Entry(interactables, width = 15, textvariable = lbl_schoolEntered)
 #open csv button
-lbl_csv_btn = Button(interactables,text = "Open CSV", command= lambda:open_csv(interactables),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
+lbl_csv_btn = Button(interactables,text = "Open CSV", command= lambda:open_csv(interactables),font = "Arial", bg = "#20bebe",fg = "black",height = 1,width=15)
 #buttons
-lbl_browse_btn = Button(interactables, text="Browse", command= lambda:lbl_open_imagefile(display,lbl_nameEntered.get(),lbl_schoolEntered.get()), font=("Raleway",12), bg="#20bebe", fg="white", height=1, width=15)
-lbl_save_pdf_btn = Button(interactables,text = "Save As PDF", command= lambda:lbl_save_as_pdf(lbl_nameEntered.get(),lbl_schoolEntered.get()),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
+lbl_browse_btn = Button(interactables, text="Browse", command= lambda:lbl_open_imagefile(display,lbl_nameEntered.get(),lbl_schoolEntered.get()), font=("Raleway",12), bg="#20bebe", fg = "black", height=1, width=15)
+lbl_save_pdf_btn = Button(interactables,text = "Save As PDF", command= lambda:lbl_save_as_pdf(lbl_nameEntered.get(),lbl_schoolEntered.get()),font = "Arial", bg = "#20bebe",fg = "black",height = 1,width=15)
 
 #ELEMENTS FOR CERTIFICATES
 #labels
@@ -93,7 +93,7 @@ ctf_font_color_label = Label(interactables, text="Text Color: ", font=("Raleway"
 ctf_name = tk.StringVar()
 ctf_nameEntered = ttk.Entry(interactables, width = 15, textvariable = ctf_name)
 #open csv button
-ctf_csv_btn = Button(interactables,text = "Open CSV", command= lambda:open_csv(interactables),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
+ctf_csv_btn = Button(interactables,text = "Open CSV", command= lambda:open_csv(interactables),font = "Arial", bg = "#20bebe",fg = "black",height = 1,width=15)
 #x potition text input
 ctf_x_position = tk.StringVar(value = "110")
 ctf_x_position = ttk.Entry(interactables, width = 15, textvariable = ctf_x_position)
@@ -103,9 +103,9 @@ ctf_y_position = tk.StringVar(value = "60")
 ctf_y_position = ttk.Entry(interactables, width = 15, textvariable = ctf_y_position)
 ctf_y_position.insert(END, "60")
 #font text input
-ctf_font = tk.StringVar(value = "times")
+ctf_font = tk.StringVar(value = "Times New Roman Bold")
 ctf_font = ttk.Entry(interactables, width = 15, textvariable = nt_font)
-ctf_font.insert(END, "times")
+ctf_font.insert(END, "Times New Roman Bold")
 #font size text input
 ctf_font_size = tk.StringVar(value = "10")
 ctf_font_size = ttk.Entry(interactables, width = 15, textvariable = nt_font_size)
@@ -115,9 +115,9 @@ ctf_font_color = tk.StringVar(value = "#000000")
 ctf_font_color = ttk.Entry(interactables, width = 15, textvariable = nt_font_color)
 ctf_font_color.insert(END, "#000000")
 #buttons
-ctf_browse_btn = Button(interactables, text="Browse", command= lambda:ctf_open_imagefile(display,ctf_name.get(),ctf_x_position.get(),ctf_y_position.get(),ctf_font.get(),ctf_font_size.get(),ctf_font_color.get()), font=("Raleway",12), bg="#20bebe", fg="white", height=1, width=15)
-ctf_save_pdf_btn = Button(interactables,text = "Save As PDF", command= lambda:ctf_save_as_pdf(ctf_name.get(),int(ctf_x_position.get()),int(ctf_y_position.get()),ctf_font.get(),ctf_font_size.get(),ctf_font_color.get()),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
-ctf_update_preview_btn = Button(interactables,text = "Update Preview", command= lambda:ctf_update_preview(display,ctf_name.get(),int(ctf_x_position.get()),int(ctf_y_position.get()),ctf_font.get(),ctf_font_size.get(),ctf_font_color.get()),font = "Arial", bg = "#20bebe",fg = "white",height = 1,width=15)
+ctf_browse_btn = Button(interactables, text="Browse", command= lambda:ctf_open_imagefile(display,ctf_name.get(),ctf_x_position.get(),ctf_y_position.get(),ctf_font.get(),ctf_font_size.get(),ctf_font_color.get()), font=("Raleway",12), bg="#20bebe", fg="black", height=1, width=15)
+ctf_save_pdf_btn = Button(interactables,text = "Save As PDF", command= lambda:ctf_save_as_pdf(ctf_name.get(),int(ctf_x_position.get()),int(ctf_y_position.get()),ctf_font.get(),ctf_font_size.get(),ctf_font_color.get()),font = "Arial", bg = "#20bebe",fg = "black",height = 1,width=15)
+ctf_update_preview_btn = Button(interactables,text = "Update Preview", command= lambda:ctf_update_preview(display,ctf_name.get(),int(ctf_x_position.get()),int(ctf_y_position.get()),ctf_font.get(),ctf_font_size.get(),ctf_font_color.get()),font = "Arial", bg = "#20bebe",fg = "black",height = 1,width=15)
 
 def clear_grid():
     for widget in interactables.grid_slaves():

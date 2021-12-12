@@ -2,6 +2,7 @@ import sys
 import tkinter as tk
 from tkinter import *
 from tkinter import filedialog
+from tkinter.font import Font
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
@@ -69,7 +70,7 @@ def nt_save_as_pdf(message,y,font,font_size,font_color):
       result_image = ImageReader(BytesIO(image_byte_array))
       return result_image
 
-    temp_font_string = font+"bd.ttf"
+    temp_font_string = font+".ttf"
     myFont = ImageFont.truetype(temp_font_string, int(font_size))
 
     def clear_canvas():
@@ -150,15 +151,15 @@ def nt_open_imagefile(display,message,y,font,font_size,font_color):
     canvas = Canvas(display,width=300,height=185)
     canvas.grid(column = 2, row=1)
     canvas.create_image(0,0,image=canvas_img,anchor='nw')
-    temp_font_string = font+ " "+font_size+" bold"
-    canvas.create_text(130,y,fill=font_color,font=temp_font_string,
+    tempFont = Font(family=font, size=font_size)
+    canvas.create_text(130,y,fill=font_color,font=tempFont,
     text=message)
 def nt_update_preview(display,message,y,font,font_size,font_color):
     canvas = Canvas(display,width=300,height=185)
     canvas.grid(column = 2, row=1)
     canvas.create_image(0,0,image=canvas_img,anchor='nw')
-    temp_font_string = font+ " "+font_size+" bold"
-    canvas.create_text(130,y,fill=font_color,font=temp_font_string,
+    tempFont = Font(family=font, size=font_size)
+    canvas.create_text(130,y,fill=font_color,font=tempFont,
     text=message)
 
 
@@ -174,7 +175,7 @@ def lbl_save_as_pdf(message,school):
       result_image = ImageReader(BytesIO(image_byte_array))
       return result_image
 
-    myFont = ImageFont.truetype(r'C:\Users\System-Pc\Desktop\timesbd.ttf', 30)
+    myFont = ImageFont.truetype(r'/System/Library/Fonts/Supplemental/Times New Roman Bold.ttf', 30)
 
     def clear_canvas():
         I1.rectangle((100, 100, 300, 150))
@@ -274,9 +275,9 @@ def ctf_save_as_pdf(message,x,y,font,font_size,font_color):
       result_image = ImageReader(BytesIO(image_byte_array))
       return result_image
 
-    temp_font_string = font+"bd.ttf"
     temp_font_size = int(font_size)*4
-    myFont = ImageFont.truetype(temp_font_string, temp_font_size)
+    temp_font_string = font+".ttf"
+    myFont = ImageFont.truetype(temp_font_string, int(temp_font_size))
 
     def clear_canvas():
         I1.rectangle((300, 300, 300, 300))
@@ -333,13 +334,13 @@ def ctf_open_imagefile(display,message,x,y,font,font_size,font_color):
     canvas = Canvas(display,width=250,height=185)
     canvas.grid(column = 2, row=1)
     canvas.create_image(0,0,image=canvas_img,anchor='nw')
-    temp_font_string = font+" "+font_size+" bold"
-    canvas.create_text(x,y,fill=font_color,font=temp_font_string,
+    tempFont = Font(family=font, size=font_size)
+    canvas.create_text(x,y,fill=font_color,font=tempFont,
     text=message)
 def ctf_update_preview(display,message,x,y,font,font_size,font_color):
     canvas = Canvas(display,width=250,height=185)
     canvas.grid(column = 2, row=1)
     canvas.create_image(0,0,image=canvas_img,anchor='nw')
-    temp_font_string = font+" "+font_size+" bold"
-    canvas.create_text(x,y,fill=font_color,font=temp_font_string,
+    tempFont = Font(family=font, size=font_size)
+    canvas.create_text(x,y,fill=font_color,font=tempFont,
     text=message)
