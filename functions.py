@@ -32,6 +32,7 @@ def extract_input(message):
                 value_names[i] = value_names[i][1:]
             value_names[i] = value_names[i].replace("<", "")
     else:
+        value_names = []
         value_names.append(msg)
     return value_names
 #local function for resizing image to fit preview (not used to actually resize image)
@@ -47,10 +48,14 @@ def resize_image(img):
 def open_csv(root):
     global read_csv_file
     csv_file_open = filedialog.askopenfile(mode='r',title='Choose a file')
+    if not csv_file_open.name.endswith(".csv"):
+        return
+    try:
+        read_csv_file = pd.read_csv(csv_file_open)
+    except ValueError:
+        return
     columns = []
     csv_string = "Values: "
-    read_csv_file = pd.read_csv(csv_file_open)
-
     for col in read_csv_file.columns:
         columns.append(col)
         csv_string += col + " "
@@ -62,7 +67,8 @@ def open_csv(root):
 def nt_save_as_pdf(message,y,font,font_size,font_color):
     msg = message
     c = canvas.Canvas('test.pdf',pagesize=A4)
-
+    using_csv = True
+    test_array = []
     def image_to_byte_array(image:Image):
       image_byte_array = BytesIO()
       image.save(image_byte_array, format='PNG')
@@ -76,60 +82,78 @@ def nt_save_as_pdf(message,y,font,font_size,font_color):
     def clear_canvas():
         I1.rectangle((100, 100, 300, 150))
 
-    if "<" in msg:
-            user_input_values = extract_input(message)
-            total_array = []
-            global read_csv_file
-            total_array.append(read_csv_file[user_input_values].values)
-            print(total_array)
-            for values_index in range(len(total_array[0])):
-                current_text = ""
+
+    while using_csv == True:
+        if "<" not in message or ">" not in message:
+            using_csv = False
+        user_input_values = extract_input(message)
+        total_array = []
+        global read_csv_file
+        try:
+            test_array.append(read_csv_file[user_input_values].values)
+        except KeyError:
+            using_csv = False
+            break
+        except NameError:
+            using_csv = False
+            break
+        total_array.append(read_csv_file[user_input_values].values)
+        print(total_array)
+        for values_index in range(len(total_array[0])):
+            current_text = ""
+            try:
                 img = Image.open(fname)
-                img = img.resize((248,150))
-                I1 = ImageDraw.Draw(img)
-                for i in range(len(total_array[0][values_index])):
-                    current_text += total_array[0][values_index][i] + " "
-                w,h = myFont.getsize(current_text)
-                I1.text(((248-w)/2,y-10), current_text , font = myFont, fill=font_color)
-                finalImage = image_to_byte_array(img)
-                nametag_width = 248
-                nametag_height = 150
-                if (values_index %10 == 0):
-                    c.drawImage(finalImage, 50, 30,  nametag_width, nametag_height) #x,y and w,h
-                    clear_canvas()
-                if (values_index %10 == 1):
-                    c.drawImage(finalImage, 50+nametag_width+1, 30,  nametag_width, nametag_height)
-                    clear_canvas()
-                if (values_index %10 == 2):
-                    c.drawImage(finalImage, 50, 30+nametag_height+2, nametag_width, nametag_height)
-                    clear_canvas()
-                if (values_index %10 == 3):
-                    c.drawImage(finalImage, 50+nametag_width+1, 30+nametag_height+2,  nametag_width, nametag_height)
-                    clear_canvas()
-                if (values_index %10 == 4):
-                    c.drawImage(finalImage, 50, 30+2*nametag_height+4,  nametag_width, nametag_height)
-                    clear_canvas()
-                if (values_index %10 == 5):
-                    c.drawImage(finalImage, 50+nametag_width+1, 30+2*nametag_height+4,  nametag_width, nametag_height)
-                    clear_canvas()
-                if (values_index %10 == 6):
-                    c.drawImage(finalImage, 50, 30+3*nametag_height+6,  nametag_width, nametag_height)
-                    clear_canvas()
-                if (values_index %10 == 7):
-                    c.drawImage(finalImage, 50+nametag_width+1, 30+3*nametag_height+6,  nametag_width, nametag_height)
-                    clear_canvas()
-                if (values_index %10 == 8):
-                    c.drawImage(finalImage, 50, 30+4*nametag_height+8,  nametag_width, nametag_height)
-                    clear_canvas()
-                if (values_index %10 == 9):
-                    c.drawImage(finalImage, 50+nametag_width+1, 30+4*nametag_height+8,  nametag_width, nametag_height)
-                    clear_canvas()
-                    c.showPage()
-    else:
+            except NameError:
+                return
+            img = img.resize((248,150))
+            I1 = ImageDraw.Draw(img)
+            for i in range(len(total_array[0][values_index])):
+                current_text += total_array[0][values_index][i] + " "
+            w,h = myFont.getsize(current_text)
+            I1.text(((248-w)/2,y-10), current_text , font = myFont, fill=font_color)
+            finalImage = image_to_byte_array(img)
+            nametag_width = 248
+            nametag_height = 150
+            if (values_index %10 == 0):
+                c.drawImage(finalImage, 50, 30,  nametag_width, nametag_height) #x,y and w,h
+                clear_canvas()
+            if (values_index %10 == 1):
+                c.drawImage(finalImage, 50+nametag_width+1, 30,  nametag_width, nametag_height)
+                clear_canvas()
+            if (values_index %10 == 2):
+                c.drawImage(finalImage, 50, 30+nametag_height+2, nametag_width, nametag_height)
+                clear_canvas()
+            if (values_index %10 == 3):
+                c.drawImage(finalImage, 50+nametag_width+1, 30+nametag_height+2,  nametag_width, nametag_height)
+                clear_canvas()
+            if (values_index %10 == 4):
+                c.drawImage(finalImage, 50, 30+2*nametag_height+4,  nametag_width, nametag_height)
+                clear_canvas()
+            if (values_index %10 == 5):
+                c.drawImage(finalImage, 50+nametag_width+1, 30+2*nametag_height+4,  nametag_width, nametag_height)
+                clear_canvas()
+            if (values_index %10 == 6):
+                c.drawImage(finalImage, 50, 30+3*nametag_height+6,  nametag_width, nametag_height)
+                clear_canvas()
+            if (values_index %10 == 7):
+                c.drawImage(finalImage, 50+nametag_width+1, 30+3*nametag_height+6,  nametag_width, nametag_height)
+                clear_canvas()
+            if (values_index %10 == 8):
+                c.drawImage(finalImage, 50, 30+4*nametag_height+8,  nametag_width, nametag_height)
+                clear_canvas()
+            if (values_index %10 == 9):
+                c.drawImage(finalImage, 50+nametag_width+1, 30+4*nametag_height+8,  nametag_width, nametag_height)
+                clear_canvas()
+                c.showPage()
+        break
+    if using_csv == False:
         total_array = []
         total_array.append(message)
         current_text = ""
-        img = Image.open(fname)
+        try:
+            img = Image.open(fname)
+        except NameError:
+            return
         img = img.resize((248,150))
         I1 = ImageDraw.Draw(img)
         current_text = total_array[0]
@@ -143,9 +167,14 @@ def nt_open_imagefile(display,message,y,font,font_size,font_color):
     global fname
     global canvas_img_postscript
     currdir = os.getcwd()
-    fname = filedialog.askopenfile(mode='rb',title='Choose a file')
-    print(fname)
-    img = Image.open(fname)
+    try:
+        temp_fname = filedialog.askopenfile(mode='rb',title='Choose a file')
+        img = Image.open(temp_fname)
+    except AttributeError:
+        return
+    except OSError:
+        return
+    fname = temp_fname
     img = resize_image(img)
     canvas_img = ImageTk.PhotoImage(img)
     canvas = Canvas(display,width=300,height=185)
@@ -157,7 +186,10 @@ def nt_open_imagefile(display,message,y,font,font_size,font_color):
 def nt_update_preview(display,message,y,font,font_size,font_color):
     canvas = Canvas(display,width=300,height=185)
     canvas.grid(column = 2, row=1)
-    canvas.create_image(0,0,image=canvas_img,anchor='nw')
+    try:
+        canvas.create_image(0,0,image=canvas_img,anchor='nw')
+    except NameError:
+        return
     tempFont = Font(family=font, size=font_size)
     canvas.create_text(130,y,fill=font_color,font=tempFont,
     text=message)
@@ -167,6 +199,9 @@ def nt_update_preview(display,message,y,font,font_size,font_color):
 def lbl_save_as_pdf(message,school):
     msg = message
     sch = school
+    using_csv_message = True
+    using_csv_school = True
+    test_array = []
     c = canvas.Canvas('test.pdf',pagesize=A4)
     def image_to_byte_array(image:Image):
       image_byte_array = BytesIO()
@@ -180,10 +215,31 @@ def lbl_save_as_pdf(message,school):
     def clear_canvas():
         I1.rectangle((100, 100, 300, 150))
 
-    if "<" in msg:
-        if "<" in sch:
-            user_input_values = extract_input(message)
-            school_input_values = extract_input(school)
+    if "<" not in msg or ">" not in msg:
+        using_csv_message = False
+
+    if  "<" not in sch or ">" not in sch:
+        using_csv_school = False
+
+    user_input_values = extract_input(message)
+    school_input_values = extract_input(school)
+
+    try:
+        test_array.append(read_csv_file[user_input_values].values)
+    except KeyError:
+        using_csv_message = False
+    except NameError:
+        using_csv_message = False
+
+    try:
+        test_array.append(read_csv_file[school_input_values].values)
+    except KeyError:
+        using_csv_school = False
+    except NameError:
+        using_csv_school = False
+
+    if using_csv_message == True:
+        if using_csv_school == True:
             temp_name_array = []
             temp_school_array = []
             for names in read_csv_file[user_input_values].values:
@@ -201,7 +257,10 @@ def lbl_save_as_pdf(message,school):
         for values_index in range(len(temp_name_array)):
             name_text = ""
             school_text = ""
-            img = Image.open(fname)
+            try:
+                img = Image.open(fname)
+            except NameError:
+                return
             I1 = ImageDraw.Draw(img)
             W = int(img.size[0])
             H = int(img.size[1])
@@ -232,7 +291,10 @@ def lbl_save_as_pdf(message,school):
                 column_temp = 0
     else:
         current_text = ""
-        img = Image.open(fname)
+        try:
+            img = Image.open(fname)
+        except NameError:
+            return
         I1 = ImageDraw.Draw(img)
         W = int(img.size[0])
         H = int(img.size[1])
@@ -252,8 +314,14 @@ def lbl_open_imagefile(display,message,school):
     global canvas_img
     global fname
     currdir = os.getcwd()
-    fname = filedialog.askopenfile(mode='rb',title='Choose a file')
-    img = Image.open(fname)
+    try:
+        temp_fname = filedialog.askopenfile(mode='rb',title='Choose a file')
+        img = Image.open(temp_fname)
+    except AttributeError:
+        return
+    except OSError:
+        return
+    fname = temp_fname
     img = img.resize((202,100))
     canvas_img = ImageTk.PhotoImage(img)
     canvas = Canvas(display,width=300,height=185)
@@ -268,6 +336,8 @@ def lbl_open_imagefile(display,message,school):
 def ctf_save_as_pdf(message,x,y,font,font_size,font_color):
     msg = message
     c = canvas.Canvas('test.pdf', pagesize=A4)
+    test_array = []
+    using_csv = True
     def image_to_byte_array(image:Image):
       image_byte_array = BytesIO()
       image.save(image_byte_array, format='PNG')
@@ -282,34 +352,50 @@ def ctf_save_as_pdf(message,x,y,font,font_size,font_color):
     def clear_canvas():
         I1.rectangle((300, 300, 300, 300))
 
-    if "<" in msg:
-            user_input_values = extract_input(message)
-            total_array = []
-            global read_csv_file
-            total_array.append(read_csv_file[user_input_values].values)
-            print(total_array)
-            x = x*4
-            y = y*4
-            for values_index in range(len(total_array[0])):
-                current_text = ""
+    while using_csv == True:
+        if "<" not in message or ">" not in message:
+            using_csv = False
+        user_input_values = extract_input(message)
+        total_array = []
+        global read_csv_file
+        try:
+            test_array.append(read_csv_file[user_input_values].values)
+        except KeyError:
+            using_csv = False
+            break
+        except NameError:
+            using_csv = False
+            break
+        x = x*4
+        y = y*4
+        total_array.append(read_csv_file[user_input_values].values)
+        for values_index in range(len(total_array[0])):
+            current_text = ""
+            try:
                 img = Image.open(fname)
-                img = img.resize((848,600))
-                I1 = ImageDraw.Draw(img)
-                for i in range(len(total_array[0][values_index])):
-                    current_text += total_array[0][values_index][i] + " "
-                w,h = myFont.getsize(current_text)
-                I1.text((x-w/2,y-20), current_text , font = myFont, fill=font_color)
-                finalImage = image_to_byte_array(img)
-                c.translate(A4[0]/2, A4[1]/2)
-                c.rotate(90)
-                c.drawImage(finalImage, -425, -300,  848, 600) #x,y and w,h
-                clear_canvas()
-                c.showPage()
-    else:
+            except NameError:
+                return
+            img = img.resize((848,600))
+            I1 = ImageDraw.Draw(img)
+            for i in range(len(total_array[0][values_index])):
+                current_text += total_array[0][values_index][i] + " "
+            w,h = myFont.getsize(current_text)
+            I1.text((x-w/2,y-20), current_text , font = myFont, fill=font_color)
+            finalImage = image_to_byte_array(img)
+            c.translate(A4[0]/2, A4[1]/2)
+            c.rotate(90)
+            c.drawImage(finalImage, -425, -300,  848, 600) #x,y and w,h
+            clear_canvas()
+            c.showPage()
+        break
+    if using_csv == False:
         total_array = []
         total_array.append(message)
         current_text = ""
-        img = Image.open(fname)
+        try:
+            img = Image.open(fname)
+        except NameError:
+            return
         img = img.resize((848,600))
         I1 = ImageDraw.Draw(img)
         current_text = total_array[0]
@@ -327,8 +413,14 @@ def ctf_open_imagefile(display,message,x,y,font,font_size,font_color):
     global canvas_img
     global fname
     currdir = os.getcwd()
-    fname = filedialog.askopenfile(mode='rb',title='Choose a file')
-    img = Image.open(fname)
+    try:
+        temp_fname = filedialog.askopenfile(mode='rb',title='Choose a file')
+        img = Image.open(temp_fname)
+    except AttributeError:
+        return
+    except OSError:
+        return
+    fname = temp_fname
     img = resize_image(img)
     canvas_img = ImageTk.PhotoImage(img)
     canvas = Canvas(display,width=250,height=185)
@@ -338,9 +430,12 @@ def ctf_open_imagefile(display,message,x,y,font,font_size,font_color):
     canvas.create_text(x,y,fill=font_color,font=tempFont,
     text=message)
 def ctf_update_preview(display,message,x,y,font,font_size,font_color):
-    canvas = Canvas(display,width=250,height=185)
+    canvas = Canvas(display,width=300,height=185)
     canvas.grid(column = 2, row=1)
-    canvas.create_image(0,0,image=canvas_img,anchor='nw')
+    try:
+        canvas.create_image(0,0,image=canvas_img,anchor='nw')
+    except NameError:
+        return
     tempFont = Font(family=font, size=font_size)
     canvas.create_text(x,y,fill=font_color,font=tempFont,
     text=message)
